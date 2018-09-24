@@ -1,23 +1,41 @@
+const request = require('request');
+  
+const G_API=JSON.parse(require('fs').readFileSync('secrets.json','utf8'))['google-maps-api-key'];
 
-var getAddress = (address) => {
-  let G_API=JSON.parse(require('fs').readFileSync('secrets.json','utf8'))['google-maps-api-key'];
+var drawLine= (n) => {
+  console.log('-'.repeat(n));
+};
+var verbose = (obj) => {
+  drawLine(100);
+  console.log(JSON.stringify(obj, undefined, 2));
+  drawLine(100);
+};
+
+var getAddress = (address, callback) => {
   let url=`https://maps.googleapis.com/maps/api/geocode/json?key=${G_API}`;
-
-  const request = require('request');
-  var encodedAddress=encodeURIComponent(address);
-  console.log(encodedAddress);
+  let encodedAddress=encodeURIComponent(address);
 
   requestUrl=`${url}&address=${encodedAddress}`;
+
   request({
   url: requestUrl,
   json: true
   }, (error, response, body) => {
-  //body.results[0].geometry.location
-  
-  var lng=body.results[0].geometry.location.lng;
-  var lat=body.results[0].geometry.location.lat;
-  console.log(`Address: ${body.results[0].formatted_address}`);
-  console.log(`Location: (lat,lng) [${lat},${lng}]`);
+  //body.results[0].geometry.location    
+    if(error) {
+      console.log('There was an error connecting to the API');
+    } else if(body.status === "OK") {
+      let lng=body.results[0].geometry.location.lng;
+      let lat=body.results[0].geometry.location.lat;
+      let address=body.results[0].formatted_address;
+      callback({
+        lat,
+        lng,
+        address
+      });
+    } else {
+      console.log('Address not found');
+    }
   });
 };
 

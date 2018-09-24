@@ -13,5 +13,8 @@ var argv = yargs
   .argv;
   console.log(argv);
 if(argv.address) {
-  geocode.getAddress(argv.address);
+  geocode.getAddress(argv.address, ({lat, lng, address}) =>{
+    console.log(`Address: ${address}`);
+    console.log(`Location: (lat,lng) [${lat},${lng}]`);
+  });
 }
