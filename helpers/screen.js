@@ -7,7 +7,6 @@ var verbose = (obj) => {
   drawLine(100);
 };
 
-module.exports = {
-  drawLine,
+module.exports = {  
   verbose
 };
