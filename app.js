@@ -30,13 +30,10 @@ var argv = yargs
 
   if(argv.address) {
   geocode.geocodeAddress(argv.address, (error, response) => {
-    var body = response.body;
     if(error) {
       console.log('There was an error connecting to the API');
-    } else if(body.status === "OK") {
-      showAddress( extractAdressDetails(body.results[0]));
     } else {
-      console.log('Address not found');
+      showAddress( extractAdressDetails(body.results[0]));
     }
   });
 }
