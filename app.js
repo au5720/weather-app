@@ -1,6 +1,11 @@
 var yargs = require('yargs');
 var geocode = require('./geolocation/geolocation');
 
+let showAddress = ({lat, lng, address}) => {
+  console.log(`Address: ${address}`);
+  console.log(`Location: (lat,lng) [${lat},${lng}]`);
+};
+
 var argv = yargs
   .options({
     a: {
@@ -11,10 +16,8 @@ var argv = yargs
   })
   .help()
   .argv;
-  console.log(argv);
-if(argv.address) {
-  geocode.getAddress(argv.address, ({lat, lng, address}) =>{
-    console.log(`Address: ${address}`);
-    console.log(`Location: (lat,lng) [${lat},${lng}]`);
-  });
+
+  if(argv.address) {
+  geocode.getAddress(argv.address, showAddress);
 }
+
